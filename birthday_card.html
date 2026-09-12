@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Greeting Card</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: "Georgia", "Palatino Linotype", serif; }
+
+  .scene {
+    position: relative;
+    width: 1080px; height: 1920px;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 900px at 50% -5%, rgba(255,255,255,0.95) 0%, rgba(255,236,242,0) 60%),
+      radial-gradient(1400px 1100px at 18% 22%, rgba(255,228,214,0.60) 0%, rgba(255,228,214,0) 60%),
+      radial-gradient(1400px 1200px at 82% 30%, rgba(235,220,255,0.58) 0%, rgba(235,220,255,0) 62%),
+      radial-gradient(1500px 1300px at 50% 100%, rgba(255,214,230,0.60) 0%, rgba(255,214,230,0) 60%),
+      linear-gradient(180deg, #fff8f2 0%, #ffeff5 34%, #f6eeff 68%, #ffe6f0 100%);
+  }
+
+  /* soft light rays from top */
+  .rays {
+    position: absolute; left: 50%; top: -320px;
+    width: 1700px; height: 1900px;
+    transform: translateX(-50%);
+    background: repeating-conic-gradient(from 0deg at 50% 0%,
+      rgba(255,255,255,0.50) 0deg 8deg,
+      transparent 8deg 26deg);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+            mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+    filter: blur(18px);
+    opacity: 0.6;
+  }
+
+  /* warm halo top */
+  .halo {
+    position: absolute; left: 50%; top: -120px;
+    width: 900px; height: 900px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,220,214,0.55) 38%, rgba(255,220,214,0) 70%);
+  }
+
+  /* bokeh dots */
+  .bokeh { position: absolute; border-radius: 50%; filter: blur(2px); pointer-events: none; }
+  .bokeh.b1 { left: 60px;  top: 640px;  width: 150px; height: 150px; background: rgba(255,190,210,0.30); }
+  .bokeh.b2 { left: 880px; top: 700px;  width: 190px; height: 190px; background: rgba(205,180,255,0.30); }
+  .bokeh.b3 { left: 130px; top: 1240px; width: 170px; height: 170px; background: rgba(255,220,190,0.35); }
+  .bokeh.b4 { left: 840px; top: 1280px; width: 140px; height: 140px; background: rgba(255,190,210,0.30); }
+  .bokeh.b5 { left: 460px; top: 480px;  width: 90px;  height: 90px;  background: rgba(255,255,255,0.55); }
+  .bokeh.b6 { left: 560px; top: 1390px; width: 100px; height: 100px; background: rgba(255,255,255,0.55); }
+
+  /* golden polka specks */
+  .specks {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(248,196,120,0.28) 2px, transparent 2.5px),
+      radial-gradient(circle, rgba(234,120,160,0.16) 1.6px, transparent 2.1px);
+    background-size: 120px 120px, 90px 90px;
+    background-position: 10px 20px, 60px 70px;
+  }
+
+  .layer { position: absolute; inset: 0; }
+
+  /* ---------- sparkles ---------- */
+  .sparkle { position: absolute; pointer-events: none; }
+  .sparkle svg { display: block; }
+
+  /* ---------- card ---------- */
+  .card-wrap {
+    position: absolute; left: 0; top: 0;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    z-index: 9;
+  }
+  .card {
+    position: relative;
+    width: 904px;
+    padding: 46px 52px 44px;
+    text-align: center;
+    border-radius: 44px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,247,250,0.92));
+    box-shadow:
+      0 30px 80px rgba(214,120,160,0.28),
+      0 8px 28px rgba(200,110,150,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+    border: 1px solid rgba(255,255,255,0.85);
+  }
+  .card::before {
+    content: "";
+    position: absolute; inset: 14px;
+    border-radius: 32px;
+    border: 1px solid rgba(228,140,170,0.45);
+    box-shadow: inset 0 0 0 6px rgba(255,255,255,0.35), inset 0 0 0 6.5px rgba(245,180,200,0.28);
+  }
+
+  .top-orn {
+    font-size: 30px; color: #e58aa8;
+    letter-spacing: 14px; line-height: 1;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: "Gabriola", "Segoe Script", "Brush Script MT", cursive;
+    font-weight: 700;
+    font-size: 82px;
+    line-height: 1.06;
+    color: #c1426f;
+    text-shadow: 0 2px 0 rgba(255,255,255,0.9), 0 6px 18px rgba(200,90,130,0.28);
+    letter-spacing: 0.5px;
+  }
+  .flower-line { font-size: 30px; margin: 10px 0 6px; line-height: 1; }
+  .divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; margin: 18px auto 22px; width: 300px;
+  }
+  .divider::before, .divider::after {
+    content: ""; height: 1px; flex: 1;
+    background: linear-gradient(90deg, transparent, rgba(216,140,170,0.8), transparent);
+  }
+  .divider span { font-size: 22px; color: #d97a9e; line-height: 1; }
+
+  .card p {
+    font-size: 26px;
+    line-height: 1.62;
+    color: #7c4359;
+    margin-bottom: 20px;
+    font-family: "Georgia", "Palatino Linotype", "Times New Roman", serif;
+    font-weight: 400;
+  }
+  .card p:last-of-type { margin-bottom: 6px; }
+
+  .closing {
+    margin-top: 6px;
+    font-size: 30px;
+    line-height: 1.4;
+    font-family: "Gabriola", "Segoe Script", "Brush Script MT", cursive;
+    font-weight: 700;
+    color: #c1426f;
+  }
+  .closing em { font-style: normal; font-size: 34px; letter-spacing: 2px; }
+
+  /* vignette */
+  .vignette {
+    position: absolute; inset: 0; z-index: 12;
+    background: radial-gradient(1600px 1600px at 50% 50%, transparent 55%, rgba(190,110,150,0.22) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="rays"></div>
+  <div class="halo"></div>
+
+  <div class="layer">
+    <div class="bokeh b1"></div><div class="bokeh b2"></div>
+    <div class="bokeh b3"></div><div class="bokeh b4"></div>
+    <div class="bokeh b5"></div><div class="bokeh b6"></div>
+    <div class="specks"></div>
+  </div>
+
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+        <feGaussianBlur stdDeviation="3" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="bigGlow" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stdDeviation="5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+
+      <!-- gradients -->
+      <radialGradient id="gPeonyDark" cx="38%" cy="30%" r="72%">
+        <stop offset="0%" stop-color="#f2a1b9"/><stop offset="100%" stop-color="#d95f87"/>
+      </radialGradient>
+      <radialGradient id="gPeonyMid" cx="38%" cy="30%" r="72%">
+        <stop offset="0%" stop-color="#f9bccd"/><stop offset="100%" stop-color="#ee85a4"/>
+      </radialGradient>
+      <radialGradient id="gPeonyLight" cx="38%" cy="30%" r="72%">
+        <stop offset="0%" stop-color="#fddde6"/><stop offset="100%" stop-color="#f6a7bd"/>
+      </radialGradient>
+      <radialGradient id="gRoseSoft" cx="40%" cy="32%" r="70%">
+        <stop offset="0%" stop-color="#ffd0dd"/><stop offset="100%" stop-color="#f58aa9"/>
+      </radialGradient>
+      <radialGradient id="gBlossom" cx="40%" cy="32%" r="70%">
+        <stop offset="0%" stop-color="#fde3ea"/><stop offset="100%" stop-color="#f4a7bb"/>
+      </radialGradient>
+      <radialGradient id="gBud" cx="40%" cy="30%" r="70%">
+        <stop offset="0%" stop-color="#ffc9d8"/><stop offset="100%" stop-color="#e97a9c"/>
+      </radialGradient>
+      <radialGradient id="gGold" cx="40%" cy="32%" r="70%">
+        <stop offset="0%" stop-color="#ffe8a8"/><stop offset="100%" stop-color="#f2b94f"/>
+      </radialGradient>
+      <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#a9dfbe"/><stop offset="100%" stop-color="#7cc79c"/>
+      </linearGradient>
+      <linearGradient id="gLeafDark" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#93d3b0"/><stop offset="100%" stop-color="#63b98b"/>
+      </linearGradient>
+
+      <radialGradient id="gBallBlush" cx="38%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="#ffd7e0"/><stop offset="100%" stop-color="#ef87a4"/>
+      </radialGradient>
+      <radialGradient id="gBallLav" cx="38%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="#e3d4ff"/><stop offset="100%" stop-color="#a98be8"/>
+      </radialGradient>
+      <radialGradient id="gBallPeach" cx="38%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="#ffe3c2"/><stop offset="100%" stop-color="#f0a35e"/>
+      </radialGradient>
+
+      <linearGradient id="gCakeTop" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffeef4"/><stop offset="100%" stop-color="#f6bfd4"/>
+      </linearGradient>
+      <linearGradient id="gCakeBtm" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffd7e4"/><stop offset="100%" stop-color="#eda3bf"/>
+      </linearGradient>
+      <linearGradient id="gFlame" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffe9a0"/><stop offset="55%" stop-color="#ffc25e"/><stop offset="100%" stop-color="#ff8f3d"/>
+      </linearGradient>
+      <linearGradient id="gCandle" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e7f4ff"/><stop offset="100%" stop-color="#c7def5"/>
+      </linearGradient>
+      <radialGradient id="gCandleGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(255,214,140,0.95)"/><stop offset="45%" stop-color="rgba(255,214,140,0.45)"/><stop offset="100%" stop-color="rgba(255,214,140,0)"/>
+      </radialGradient>
+      <radialGradient id="gCakeGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(255,190,215,0.55)"/><stop offset="100%" stop-color="rgba(255,190,215,0)"/>
+      </radialGradient>
+    </defs>
+
+    <!-- ================= PEONY ================= -->
+    <g id="peony">
+      <g>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(0 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(45 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(90 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(135 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(180 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(225 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(270 100 100)" fill="url(#gPeonyDark)"/>
+        <ellipse cx="100" cy="44" rx="27" ry="41" transform="rotate(315 100 100)" fill="url(#gPeonyDark)"/>
+      </g>
+      <g>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(22.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(67.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(112.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(157.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(202.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(247.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(292.5 100 100)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="100" cy="62" rx="20" ry="31" transform="rotate(337.5 100 100)" fill="url(#gPeonyMid)"/>
+      </g>
+      <g>
+        <ellipse cx="100" cy="78" rx="15" ry="23" transform="rotate(30 100 100)" fill="url(#gPeonyLight)"/>
+        <ellipse cx="100" cy="78" rx="15" ry="23" transform="rotate(90 100 100)" fill="url(#gPeonyLight)"/>
+        <ellipse cx="100" cy="78" rx="15" ry="23" transform="rotate(150 100 100)" fill="url(#gPeonyLight)"/>
+        <ellipse cx="100" cy="78" rx="15" ry="23" transform="rotate(210 100 100)" fill="url(#gPeonyLight)"/>
+        <ellipse cx="100" cy="78" rx="15" ry="23" transform="rotate(270 100 100)" fill="url(#gPeonyLight)"/>
+        <ellipse cx="100" cy="78" rx="15" ry="23" transform="rotate(330 100 100)" fill="url(#gPeonyLight)"/>
+      </g>
+      <circle cx="100" cy="100" r="12" fill="#ffd15e"/>
+      <circle cx="100" cy="100" r="7.5" fill="#ffe389"/>
+      <circle cx="100" cy="100" r="4" fill="#fff6cf"/>
+    </g>
+
+    <!-- ================= ROSE ================= -->
+    <g id="rose">
+      <g>
+        <ellipse cx="70" cy="34" rx="19" ry="30" transform="rotate(25 70 70)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="70" cy="34" rx="19" ry="30" transform="rotate(85 70 70)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="70" cy="34" rx="19" ry="30" transform="rotate(145 70 70)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="70" cy="34" rx="19" ry="30" transform="rotate(205 70 70)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="70" cy="34" rx="19" ry="30" transform="rotate(265 70 70)" fill="url(#gPeonyMid)"/>
+        <ellipse cx="70" cy="34" rx="19" ry="30" transform="rotate(325 70 70)" fill="url(#gPeonyMid)"/>
+      </g>
+      <g>
+        <ellipse cx="70" cy="48" rx="13" ry="21" transform="rotate(40 70 70)" fill="url(#gRoseSoft)"/>
+        <ellipse cx="70" cy="48" rx="13" ry="21" transform="rotate(100 70 70)" fill="url(#gRoseSoft)"/>
+        <ellipse cx="70" cy="48" rx="13" ry="21" transform="rotate(160 70 70)" fill="url(#gRoseSoft)"/>
+        <ellipse cx="70" cy="48" rx="13" ry="21" transform="rotate(220 70 70)" fill="url(#gRoseSoft)"/>
+        <ellipse cx="70" cy="48" rx="13" ry="21" transform="rotate(280 70 70)" fill="url(#gRoseSoft)"/>
+        <ellipse cx="70" cy="48" rx="13" ry="21" transform="rotate(340 70 70)" fill="url(#gRoseSoft)"/>
+      </g>
+      <circle cx="70" cy="70" r="9" fill="#ffd670"/>
+      <circle cx="70" cy="70" r="5" fill="#ffe8a3"/>
+    </g>
+
+    <!-- ================= BLOSSOM 5 ================= -->
+    <g id="blossom">
+      <g>
+        <ellipse cx="45" cy="15" rx="11" ry="17" transform="rotate(0 45 45)" fill="url(#gBlossom)"/>
+        <ellipse cx="45" cy="15" rx="11" ry="17" transform="rotate(72 45 45)" fill="url(#gBlossom)"/>
+        <ellipse cx="45" cy="15" rx="11" ry="17" transform="rotate(144 45 45)" fill="url(#gBlossom)"/>
+        <ellipse cx="45" cy="15" rx="11" ry="17" transform="rotate(216 45 45)" fill="url(#gBlossom)"/>
+        <ellipse cx="45" cy="15" rx="11" ry="17" transform="rotate(288 45 45)" fill="url(#gBlossom)"/>
+      </g>
+      <circle cx="45" cy="45" r="7" fill="#ffce62"/>
+      <circle cx="45" cy="45" r="3.5" fill="#ffe6a4"/>
+    </g>
+
+    <!-- ================= BUD ================= -->
+    <g id="bud">
+      <path d="M20 52 C 34 18, 36 16, 44 20 C 38 26, 32 36, 30 52 Z" fill="url(#gBud)"/>
+      <path d="M22 44 C 40 46, 42 44, 44 40 C 40 52, 30 56, 22 52 Z" fill="#ffb7cb"/>
+      <path d="M18 50 C 26 34, 30 24, 40 20" stroke="#63b98b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M40 20 C 50 18, 60 20, 64 26 C 56 24, 48 25, 44 30 C 42 34, 46 38, 44 40 C 40 34, 38 28, 40 20 Z" fill="url(#gLeaf)"/>
+    </g>
+
+    <!-- ================= LEAF ================= -->
+    <g id="leaf">
+      <path d="M14 54 C 32 16, 86 6, 112 14 C 94 28, 84 40, 80 58 C 58 64, 28 64, 14 54 Z" fill="url(#gLeaf)"/>
+      <path d="M18 52 C 40 38, 64 30, 92 22" stroke="#b7e6c9" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+    <g id="leafSmall">
+      <path d="M12 40 C 28 10, 60 6, 78 12 C 64 22, 56 30, 54 44 C 38 50, 20 50, 12 40 Z" fill="url(#gLeafDark)"/>
+      <path d="M16 38 C 32 28, 48 22, 66 16" stroke="#c9ecd8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- ================= BALLOON ================= -->
+    <g id="balloonBlush">
+      <ellipse cx="60" cy="74" rx="46" ry="58" fill="url(#gBallBlush)"/>
+      <ellipse cx="44" cy="54" rx="12" ry="19" fill="rgba(255,255,255,0.55)" transform="rotate(-22 44 54)"/>
+      <path d="M56 130 L64 130 L60 146 Z" fill="#dd6f92"/>
+      <path d="M60 146 C 50 166, 74 174, 60 196" stroke="rgba(255,255,255,0.85)" stroke-width="2" fill="none"/>
+    </g>
+    <g id="balloonLav">
+      <ellipse cx="60" cy="74" rx="46" ry="58" fill="url(#gBallLav)"/>
+      <ellipse cx="44" cy="54" rx="12" ry="19" fill="rgba(255,255,255,0.55)" transform="rotate(-22 44 54)"/>
+      <path d="M56 130 L64 130 L60 146 Z" fill="#8f6fce"/>
+      <path d="M60 146 C 50 166, 74 174, 60 196" stroke="rgba(255,255,255,0.85)" stroke-width="2" fill="none"/>
+    </g>
+    <g id="balloonPeach">
+      <ellipse cx="60" cy="74" rx="46" ry="58" fill="url(#gBallPeach)"/>
+      <ellipse cx="44" cy="54" rx="12" ry="19" fill="rgba(255,255,255,0.55)" transform="rotate(-22 44 54)"/>
+      <path d="M56 130 L64 130 L60 146 Z" fill="#dd7f43"/>
+      <path d="M60 146 C 50 166, 74 174, 60 196" stroke="rgba(255,255,255,0.85)" stroke-width="2" fill="none"/>
+    </g>
+
+    <!-- ================= CAKE ================= -->
+    <g id="cake">
+      <circle cx="120" cy="120" r="115" fill="url(#gCakeGlow)"/>
+      <ellipse cx="120" cy="196" rx="96" ry="13" fill="#fffdfe"/>
+      <ellipse cx="120" cy="196" rx="96" ry="13" fill="none" stroke="#ecc1d2" stroke-width="2.5"/>
+      <ellipse cx="120" cy="190" rx="70" ry="8" fill="none" stroke="#f2cfdd" stroke-width="1.5"/>
+
+      <rect x="38" y="134" width="164" height="58" rx="12" fill="url(#gCakeBtm)"/>
+      <circle cx="56" cy="146" r="12" fill="#fff0f6"/>
+      <circle cx="88" cy="148" r="13" fill="#fff0f6"/>
+      <circle cx="120" cy="145" r="12" fill="#fff0f6"/>
+      <circle cx="152" cy="148" r="13" fill="#fff0f6"/>
+      <circle cx="184" cy="146" r="12" fill="#fff0f6"/>
+      <circle cx="72" cy="172" r="4.5" fill="#ff8fab"/>
+      <circle cx="120" cy="176" r="4.5" fill="#ff8fab"/>
+      <circle cx="168" cy="172" r="4.5" fill="#ff8fab"/>
+
+      <rect x="62" y="92" width="116" height="46" rx="10" fill="url(#gCakeTop)"/>
+      <circle cx="78" cy="102" r="9" fill="#fff7fb"/>
+      <circle cx="102" cy="104" r="10" fill="#fff7fb"/>
+      <circle cx="120" cy="101" r="9" fill="#fff7fb"/>
+      <circle cx="138" cy="104" r="10" fill="#fff7fb"/>
+      <circle cx="162" cy="102" r="9" fill="#fff7fb"/>
+      <circle cx="120" cy="122" r="4" fill="#ff8fab"/>
+
+      <rect x="95" y="70" width="11" height="24" rx="3.5" fill="url(#gCandle)"/>
+      <rect x="120" y="64" width="11" height="30" rx="3.5" fill="url(#gCandle)"/>
+      <rect x="145" y="70" width="11" height="24" rx="3.5" fill="url(#gCandle)"/>
+      <rect x="97" y="95" width="7" height="3.5" rx="1.7" fill="#ff5f7e"/>
+      <rect x="122" y="95" width="7" height="3.5" rx="1.7" fill="#ff5f7e"/>
+      <rect x="147" y="95" width="7" height="3.5" rx="1.7" fill="#ff5f7e"/>
+
+      <circle cx="100.5" cy="56" r="20" fill="url(#gCandleGlow)"/>
+      <circle cx="125.5" cy="50" r="24" fill="url(#gCandleGlow)"/>
+      <circle cx="150.5" cy="56" r="20" fill="url(#gCandleGlow)"/>
+      <path d="M100.5 60 C 95.5 52, 95.5 45, 100.5 39 C 105.5 45, 105.5 52, 100.5 60 Z" fill="url(#gFlame)"/>
+      <path d="M125.5 60 C 119.5 50, 119.5 41, 125.5 33 C 131.5 41, 131.5 50, 125.5 60 Z" fill="url(#gFlame)"/>
+      <path d="M150.5 60 C 145.5 52, 145.5 45, 150.5 39 C 155.5 45, 155.5 52, 150.5 60 Z" fill="url(#gFlame)"/>
+    </g>
+
+    <!-- ================= SPARKLE ================= -->
+    <g id="sparkleGold">
+      <path d="M20 2 C22.5 13.5 26.5 17.5 38 20 C26.5 22.5 22.5 26.5 20 38 C17.5 26.5 13.5 22.5 2 20 C13.5 17.5 17.5 13.5 20 2 Z" fill="#ffd787" filter="url(#softGlow)"/>
+    </g>
+    <g id="sparklePink">
+      <path d="M16 1.5 C18 11 21 14 30.5 16 C21 18 18 21 16 30.5 C14 21 11 18 1.5 16 C11 14 14 11 16 1.5 Z" fill="#ffc9d9" filter="url(#softGlow)"/>
+    </g>
+    <g id="sparkleWhite">
+      <path d="M12 1 C13.5 8.5 15.5 10.5 23 12 C15.5 13.5 13.5 15.5 12 23 C10.5 15.5 8.5 13.5 1 12 C8.5 10.5 10.5 8.5 12 1 Z" fill="#ffffff" filter="url(#softGlow)"/>
+    </g>
+
+    <!-- ================= HEART ================= -->
+    <g id="heartTiny">
+      <path d="M14 5 C14 -2 4 -4 4 4 C4 12 14 20 14 26 C14 20 24 12 24 4 C24 -4 14 -2 14 5 Z" transform="translate(-6 -6)" fill="#ff9fb9" filter="url(#softGlow)"/>
+    </g>
+
+    <!-- ================= FLOWER CLUSTER ================= -->
+    <g id="cluster">
+      <use href="#leaf"       transform="translate(30,250) rotate(-28)"/>
+      <use href="#leafSmall"  transform="translate(150,268) rotate(-50)"/>
+      <use href="#leaf"       transform="translate(270,140) rotate(30)"/>
+      <use href="#leafSmall"  transform="translate(280,40) rotate(60)"/>
+      <use href="#leafSmall"  transform="translate(20,120) rotate(-75)"/>
+      <use href="#peony"      transform="translate(28,36)"/>
+      <use href="#rose"       transform="translate(196,102)"/>
+      <use href="#blossom"    transform="translate(120,252)"/>
+      <use href="#blossom"    transform="translate(266,236) scale(0.8)"/>
+      <use href="#bud"        transform="translate(8,240) scale(1.1)"/>
+      <use href="#bud"        transform="translate(300,20) scale(0.9)"/>
+      <circle cx="150" cy="196" r="3" fill="#ffd787"/>
+      <circle cx="226" cy="176" r="2.6" fill="#ffd787"/>
+      <circle cx="242" cy="64" r="2.6" fill="#ffd787"/>
+    </g>
+  </svg>
+
+  <!-- ============ SPARKLES (back) ============ -->
+  <div class="layer" style="overflow:hidden">
+    <div class="sparkle" style="left:96px;  top:110px;  width:56px; height:56px; opacity:0.95"><svg viewBox="0 0 40 40" width="56" height="56"><use href="#sparkleGold"/></svg></div>
+    <div class="sparkle" style="left:150px; top:64px; width:28px; height:28px; opacity:0.8"><svg viewBox="0 0 40 40" width="28" height="28"><use href="#sparkleWhite"/></svg></div>
+    <div class="sparkle" style="left:900px; top:80px; width:44px; height:44px; opacity:0.9"><svg viewBox="0 0 40 40" width="44" height="44"><use href="#sparklePink"/></svg></div>
+    <div class="sparkle" style="left:980px; top:150px; width:26px; height:26px; opacity:0.85"><svg viewBox="0 0 40 40" width="26" height="26"><use href="#sparkleWhite"/></svg></div>
+    <div class="sparkle" style="left:60px;  top:400px; width:32px; height:32px; opacity:0.8"><svg viewBox="0 0 40 40" width="32" height="32"><use href="#sparklePink"/></svg></div>
+    <div class="sparkle" style="left:1010px; top:470px; width:40px; height:40px; opacity:0.9"><svg viewBox="0 0 40 40" width="40" height="40"><use href="#sparkleGold"/></svg></div>
+    <div class="sparkle" style="left:120px; top:760px; width:30px; height:30px; opacity:0.75"><svg viewBox="0 0 40 40" width="30" height="30"><use href="#sparkleWhite"/></svg></div>
+    <div class="sparkle" style="left:960px; top:820px; width:34px; height:34px; opacity:0.85"><svg viewBox="0 0 40 40" width="34" height="34"><use href="#sparklePink"/></svg></div>
+    <div class="sparkle" style="left:80px;  top:1500px; width:38px; height:38px; opacity:0.9"><svg viewBox="0 0 40 40" width="38" height="38"><use href="#sparkleGold"/></svg></div>
+    <div class="sparkle" style="left:1010px; top:1580px; width:46px; height:46px; opacity:0.95"><svg viewBox="0 0 40 40" width="46" height="46"><use href="#sparklePink"/></svg></div>
+    <div class="sparkle" style="left:490px; top:470px; width:24px; height:24px; opacity:0.9"><svg viewBox="0 0 40 40" width="24" height="24"><use href="#sparkleWhite"/></svg></div>
+    <div class="sparkle" style="left:590px; top:1380px; width:26px; height:26px; opacity:0.9"><svg viewBox="0 0 40 40" width="26" height="26"><use href="#sparkleWhite"/></svg></div>
+  </div>
+
+  <!-- ============ BALLOONS ============ -->
+  <div class="layer" style="overflow:hidden">
+    <div style="position:absolute; left:250px; top:-20px; width:150px; height:250px;"><svg viewBox="0 0 120 200" width="150" height="250"><use href="#balloonBlush"/></svg></div>
+    <div style="position:absolute; left:470px; top:-70px; width:170px; height:283px;"><svg viewBox="0 0 120 200" width="170" height="283"><use href="#balloonLav"/></svg></div>
+    <div style="position:absolute; left:690px; top:-10px; width:140px; height:233px;"><svg viewBox="0 0 120 200" width="140" height="233"><use href="#balloonPeach"/></svg></div>
+    <div style="position:absolute; left:60px; top:120px; width:92px; height:153px;"><svg viewBox="0 0 120 200" width="92" height="153"><use href="#balloonLav"/></svg></div>
+    <div style="position:absolute; left:945px; top:130px; width:100px; height:167px;"><svg viewBox="0 0 120 200" width="100" height="167"><use href="#balloonBlush"/></svg></div>
+  </div>
+
+  <!-- ============ FLOWER CLUSTERS (corners) ============ -->
+  <div class="layer" style="overflow:hidden">
+    <div style="position:absolute; left:-70px; top:-40px; width:340px; height:340px;"><svg viewBox="0 0 330 300" width="340" height="340"><use href="#cluster"/></svg></div>
+    <div style="position:absolute; left:820px; top:-60px; width:340px; height:340px;"><svg viewBox="0 0 330 300" width="340" height="340" style="transform:scaleX(-1)"><use href="#cluster"/></svg></div>
+    <div style="position:absolute; left:-80px; top:1612px; width:370px; height:370px;"><svg viewBox="0 0 330 300" width="370" height="370" style="transform:scaleY(-1)"><use href="#cluster"/></svg></div>
+    <div style="position:absolute; left:860px; top:1585px; width:370px; height:370px;"><svg viewBox="0 0 330 300" width="370" height="370" style="transform:scale(-1)"><use href="#cluster"/></svg></div>
+
+    <!-- small side accents near card -->
+    <div style="position:absolute; left:6px; top:760px; width:120px; height:120px;"><svg viewBox="0 0 90 90" width="120" height="120"><use href="#blossom"/></svg></div>
+    <div style="position:absolute; left:990px; top:1180px; width:130px; height:130px;"><svg viewBox="0 0 90 90" width="130" height="130"><use href="#rose"/></svg></div>
+    <div style="position:absolute; left:990px; top:660px; width:110px; height:110px;"><svg viewBox="0 0 90 90" width="110" height="110"><use href="#blossom"/></svg></div>
+    <div style="position:absolute; left:20px; top:1240px; width:120px; height:120px;"><svg viewBox="0 0 90 90" width="120" height="120"><use href="#blossom"/></svg></div>
+
+    <!-- floating tiny hearts -->
+    <div style="position:absolute; left:170px; top:520px; width:26px; height:26px;"><svg viewBox="0 0 26 26" width="26" height="26"><use href="#heartTiny"/></svg></div>
+    <div style="position:absolute; left:880px; top:560px; width:22px; height:22px;"><svg viewBox="0 0 26 26" width="22" height="22"><use href="#heartTiny"/></svg></div>
+    <div style="position:absolute; left:200px; top:1380px; width:24px; height:24px;"><svg viewBox="0 0 26 26" width="24" height="24"><use href="#heartTiny"/></svg></div>
+    <div style="position:absolute; left:870px; top:1460px; width:28px; height:28px;"><svg viewBox="0 0 26 26" width="28" height="28"><use href="#heartTiny"/></svg></div>
+  </div>
+
+  <!-- ============ CAKE (bottom center) ============ -->
+  <div style="position:absolute; left:425px; top:1450px; width:230px; height:230px; z-index:6;">
+    <svg viewBox="0 0 240 240" width="230" height="230"><use href="#cake"/></svg>
+  </div>
+
+  <!-- ============ CENTER CARD ============ -->
+  <div class="card-wrap">
+    <div class="card">
+      <div class="top-orn">
+        <svg viewBox="0 0 40 40" width="28" height="28" style="vertical-align:middle"><use href="#sparkleGold"/></svg>
+        <svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:middle"><use href="#sparkleWhite" transform="translate(-8 -8)"/></svg>
+        <svg viewBox="0 0 40 40" width="28" height="28" style="vertical-align:middle"><use href="#sparkleGold"/></svg>
+      </div>
+      <h1>Assalomu alaykum,<br/>Asal opa!</h1>
+      <div class="flower-line">🌷</div>
+      <div class="divider"><span><svg viewBox="0 0 90 90" width="26" height="26" style="vertical-align:middle"><use href="#blossom"/></svg></span></div>
+      <p>Yaxshimisiz? Sizni tavallud ayyomingiz bilan chin qalbimdan tabriklayman! 🎉</p>
+      <p>Doimo sog‘-salomat, baxtli va xursand bo‘lib yuring. Har bir kuningiz quvonchli va go‘zal lahzalarga boy bo‘lsin.</p>
+      <p>Yuz yoshlarni qarshi olib, hali juda ko‘p baxtli kunlarni ko‘rishingizni tilayman! 💐</p>
+      <p>Barcha ezgu niyatlaringiz amalga oshsin. Oilangiz va yaqinlaringiz mehridan doimo bahramand bo‘lib yuring.</p>
+      <div class="closing">Tug‘ilgan kuningiz muborak bo‘lsin, Asal opa!<br/>
+        <em>❤️🎂🌸</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- sparkles in front of card, subtle -->
+  <div style="position:absolute; left:330px; top:1560px; width:26px; height:26px; z-index:11"><svg viewBox="0 0 40 40" width="26" height="26"><use href="#sparkleWhite"/></svg></div>
+  <div style="position:absolute; left:760px; top:1800px; width:30px; height:30px; z-index:11"><svg viewBox="0 0 40 40" width="30" height="30"><use href="#sparkleGold"/></svg></div>
+  <div style="position:absolute; left:250px; top:1820px; width:24px; height:24px; z-index:11"><svg viewBox="0 0 40 40" width="24" height="24"><use href="#sparklePink"/></svg></div>
+
+  <div class="vignette"></div>
+</div>
+</body>
+</html>
